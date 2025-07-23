@@ -1,0 +1,152 @@
+
+Question 1
+Write a SQL query to list the titles of all movies released before 2000. Output a table with a single column for the title.
+
+Answer:
+SELECT title FROM movies WHERE year < 2000;
+
+
+
+Question 2
+Write a SQL query to find the name and birth year of the person with id 5. Output a table with two columns: name and birth.
+
+Answer:
+SELECT name, birth FROM people WHERE id = 5;
+
+
+
+Question 3
+Write a SQL query to list the titles of all movies that contain the word "Star" in their title, in alphabetical order.
+
+Answer:
+SELECT title FROM movies WHERE title LIKE '%Star%' ORDER BY title ASC;
+
+
+
+Question 4
+Write a SQL query to find the number of distinct people who have starred in Harry Pother and chamber of secrets. Output a single column and single row with the count.
+
+Answer:
+SELECT COUNT(DISTINCT person_id) FROM stars;
+
+
+
+Question 5
+Write a SQL query to list the titles of all movies that have a rating greater than 8.0 and at least 1000 votes.
+
+Answer:
+SELECT movies.title
+FROM movies
+JOIN ratings ON movies.id = ratings.movie_id
+WHERE ratings.rating > 8.0 AND ratings.votes >= 1000;
+
+
+
+Question 6
+Write a SQL query to list the names of all directors who directed movies released in 2015. Output a single column for the name, with each director appearing only once.
+
+Answer:
+SELECT DISTINCT p.name
+FROM directors d
+JOIN movies m ON d.movie_id = m.id
+JOIN people p ON d.person_id = p.id
+WHERE m.year = 2015;
+
+
+
+Question 7
+Write a SQL query to list the titles of all movies directed by people born before 1970. Output a table with a single column for the title.
+
+Answer:
+SELECT m.title
+FROM movies m
+JOIN directors d ON m.id = d.movie_id
+JOIN people p ON d.person_id = p.id
+WHERE p.birth < 1970;
+
+
+
+Question 8
+Write a SQL query to list the names of all people who have starred in at least two different movies.
+
+Answer:
+SELECT p.name
+FROM stars s
+JOIN people p ON s.person_id = p.id
+GROUP BY s.person_id
+HAVING COUNT(DISTINCT s.movie_id) >= 2;
+
+
+
+Question 9
+Write a SQL query to find the average rating of movies released after 2010, rounded to two decimal places.
+
+Answer:
+SELECT ROUND(AVG(r.rating), 2)
+FROM ratings r
+JOIN movies m ON r.movie_id = m.id
+WHERE m.year > 2010;
+
+
+
+Question 10  
+Write a Node.js code snippet that adds a new column called genre (TEXT) to the movies table using the sqlite3 package.
+
+Answer:
+```js
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('movies.db');
+
+db.run('ALTER TABLE movies ADD COLUMN genre TEXT', function(err) {
+  if (err) {
+    console.error('Error adding column:', err.message);
+  } else {
+    console.log('Column "genre" added successfully.');
+  }
+  db.close();
+});
+
+
+
+Question 11
+Write a Node.js code snippet that reads the contents of a file named 1.sql and executes the SQL query inside it using the sqlite3 package.  
+The SQL file should contain a query that lists the titles of all "Lord of the Rings" movies.
+
+Answer:
+```js
+const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
+
+const db = new sqlite3.Database('movies.db');
+const query = fs.readFileSync('1.sql', 'utf8');
+
+// 1.sql should contain: SELECT title FROM movies WHERE title LIKE 'Lord of the Rings%';
+
+db.all(query, [], (err, rows) => {
+  if (err) throw err;
+  console.log(rows);
+});
+db.close();
+
+
+
+Question 12 
+Write a Node.js code snippet that changes the name of the column birth_year in the people table to year_of_birth using an SQL query.
+
+Answer:
+```js
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('movies.db');
+
+db.run('ALTER TABLE people RENAME COLUMN birth_year TO year_of_birth', function(err) {
+  if (err) {
+    console.error('Error renaming column:', err.message);
+  } else {
+    console.log('Column "birth_year" renamed to "year_of_birth" successfully.');
+  }
+  db.close();
+});
+ 
+
